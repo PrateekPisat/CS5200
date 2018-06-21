@@ -18,9 +18,9 @@ public class api
     {
         int follower_id = -1, followee_id = -1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from users where handle = '"+ follower +"'");
+        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ follower +"'");
         if(rs.next())
             follower_id = Integer.parseInt(rs.getString("user_id"));
         else
@@ -28,7 +28,7 @@ public class api
             System.out.println(follower + " Does not exist!");
             return -1;
         }
-        rs = st.executeQuery("select user_id from users where handle = '"+ followee +"'");
+        rs = st.executeQuery("select user_id from Users where handle = '"+ followee +"'");
         if(rs.next())
             followee_id = Integer.parseInt(rs.getString("user_id"));
         else
@@ -36,7 +36,7 @@ public class api
             System.out.println(followee + " Does not exist!");
             return -1;
         }
-        String query = "INSERT INTO `Twitter`.`follows` (follower_id, followee_id) \n" +
+        String query = "INSERT INTO `Twitter`.`Follows` (follower_id, followee_id) \n" +
                            "VALUES \n" +
                            "(?, ?)";
         // create the mysql insert preparedstatement
@@ -54,7 +54,7 @@ public class api
         }
         return 0;
     }
-    
+
     // input: user handle, tweet
     // effect: the said tweet will be posted
     // example: postTweet(@ann, "I love Northeastern #neu")
@@ -62,9 +62,9 @@ public class api
     {
         int user_id=-1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from users where handle = '"+ t.getHnadle() +"'");
+        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ t.getHnadle() +"'");
         if(rs.next())
             user_id = Integer.parseInt(rs.getString("user_id"));
         else
@@ -72,12 +72,12 @@ public class api
             System.out.println(t.getHnadle()+"Does not exist!, This");
             return -1;
         }
-        String query = "INSERT INTO `Twitter`.`tweets` (user_id, post, timestamp) \n" +
+        String query = "INSERT INTO `Twitter`.`Tweets` (user_id, post, timestamp) \n" +
                            "VALUES \n" +
                            "(?, ?, ?)";
         // create the mysql insert preparedstatement
         SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date1=formatter1.parse(t.getTimestamp());  
+        Date date1=formatter1.parse(t.getTimestamp());
         java.sql.Date sqlDate = new java.sql.Date(date1.getTime());
         PreparedStatement preparedStmt = con.prepareStatement(query);
         preparedStmt.setInt (1, user_id);
@@ -94,12 +94,12 @@ public class api
         }
         return 0;
     }
-    
+
     public int addUser(User u) throws Exception
     {
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/twitter", "Prateek", "Pradnya&1");
-        String query = "INSERT INTO `Twitter`.`users` (handle, name, email, password, discription, is_person, is_hidden) \n" +
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
+        String query = "INSERT INTO `Twitter`.`Users` (handle, name, email, password, discription, is_person, is_hidden) \n" +
                            "VALUES \n" +
                            "(?, ?, ?, ?, ?, ?, ?)";
         // create the mysql insert preparedstatement
@@ -111,7 +111,7 @@ public class api
         preparedStmt.setString (5, u.getDesc());
         preparedStmt.setInt (6, u.isUser());
         preparedStmt.setInt (7, u.isHidden());
-        
+
         // execute the preparedstatement
         preparedStmt.execute();
         }
@@ -122,25 +122,25 @@ public class api
         }
         return 0;
     }
-    
+
     public List<Tweet> fetchHomeTimeline(String handle, int maxReturned) throws Exception
     {
         ArrayList<Tweet> toReturn = new ArrayList<Tweet>();
         int user_id = -1;
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from users where handle = '"+ handle +"'");
+        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
         if(rs.next())
             user_id = Integer.parseInt(rs.getString("user_id"));
         rs = st.executeQuery("select post as 'Tweets', handle, timestamp\n" +
                 "from\n" +
                 "(\n" +
                 "	select followee_id\n" +
-                "	from follows\n" +
+                "	from Follows\n" +
                 "	where follower_id = "+user_id+"\n" +
-                ") as t1, tweets, users\n" +
-                "where tweets.user_id = t1.followee_id and users.User_id = tweets.user_id\n" +
-                "order by tweets.timestamp desc, name\n" +
+                ") as t1, Tweets, Users\n" +
+                "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
+                "order by Tweets.timestamp desc, name\n" +
                 "limit " + maxReturned + ";");
         while(rs.next())
         {

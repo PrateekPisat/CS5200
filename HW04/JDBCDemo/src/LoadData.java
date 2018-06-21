@@ -104,9 +104,9 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-        //l.loadUsers();
-        //l.loadTwets();
-        l.loadFollows();
+       // l.loadUsers();
+       // l.loadTwets();
+       //l.loadFollows();
         new api().fetchHomeTimeline("@ann", 5);
     }
 }
