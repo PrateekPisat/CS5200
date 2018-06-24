@@ -1,4 +1,3 @@
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,13 +11,14 @@ import java.util.*;
 public class api
 {
     // input: follower handle, followee handle
+    // returns: 0 on success, -1 if some exception.
     // effect: the follower will follow the followee
     // example: addFollower(@ann, @bob);
     public int addFollower(String follower, String followee)
     {
         int follower_id = -1, followee_id = -1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ follower +"'");
         if(rs.next())
@@ -50,19 +50,20 @@ public class api
         catch(SQLException e)
         {
             e.printStackTrace();
-            return -1;
+            //return -1;
         }
         return 0;
     }
 
     // input: user handle, tweet
+    // returns: 0 on success, -1 on failure.
     // effect: the said tweet will be posted
     // example: postTweet(@ann, "I love Northeastern #neu")
     public int postTweet(Tweet t) throws ParseException
     {
         int user_id=-1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ t.getHnadle() +"'");
         if(rs.next())
@@ -90,15 +91,69 @@ public class api
         catch(SQLException e)
         {
             e.printStackTrace();
-            return -1;
+            //return -1;
         }
         return 0;
     }
-
+    
+    // input: handle
+    // returns: The list of Users that follow the given user.
+    // example: getFollowers(@ann)
+    public List<User> getFollowers(String handle)
+    {
+        ArrayList<User> toReturn = new ArrayList();
+        int user_id;
+        try
+        {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
+            if(rs.next())
+                user_id = Integer.parseInt(rs.getString("user_id"));
+            else
+            {
+                System.out.println(handle + " Does not exist!");
+                return null;
+            }
+            rs = st.executeQuery("select name, handle, email, password, discription, is_person, is_hidden\n" +
+                                "from\n" +
+                                "(\n" +
+                                "	select follower_id as 'Followees'\n" +
+                                "	from follows\n" +
+                                "	where Followee_id = "+ user_id +"\n" +
+                                ")as t1 join users on(Followees = users.user_id)\n" +
+                                "order by name;");
+            while(rs.next())
+            {
+                toReturn.add(Users.makeUser(
+                        rs.getString("handle"), 
+                        rs.getString("name"), 
+                        rs.getString("email"), 
+                        rs.getString("email"), 
+                        rs.getString("discription"),
+                        Integer.parseInt(rs.getString("is_person")), 
+                        Integer.parseInt(rs.getString("is_hidden"))));
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        for(int i=0;i<toReturn.size();i++)
+        {
+            System.out.println(toReturn.get(i).getName());
+        }
+        return toReturn;
+    }
+    
+    // input: User u
+    // returns: 0 on success, -1 on failure.
+    // effect: add the given user.
+    // example: addUser(Users.make("@ann", "Ann", "ann@example.com", "password", "", 1, 0));
     public int addUser(User u) throws Exception
     {
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
         String query = "INSERT INTO `Twitter`.`Users` (handle, name, email, password, discription, is_person, is_hidden) \n" +
                            "VALUES \n" +
                            "(?, ?, ?, ?, ?, ?, ?)";
@@ -118,16 +173,19 @@ public class api
         catch(SQLException e)
         {
             e.printStackTrace();
-            return -1;
+            //return -1;
         }
         return 0;
     }
 
+    // input: String handle, int number of tweets
+    // returns: List of Users
+    // example: fetchHomeTimeline("@ann", 5)
     public List<Tweet> fetchHomeTimeline(String handle, int maxReturned) throws Exception
     {
         ArrayList<Tweet> toReturn = new ArrayList<Tweet>();
         int user_id = -1;
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter", "Prateek", "Pradnya&1");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
         if(rs.next())
@@ -140,7 +198,7 @@ public class api
                 "	where follower_id = "+user_id+"\n" +
                 ") as t1, Tweets, Users\n" +
                 "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
-                "order by Tweets.timestamp desc, name\n" +
+                "order by Tweets.timestamp desc, handle\n" +
                 "limit " + maxReturned + ";");
         while(rs.next())
         {

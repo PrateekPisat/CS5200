@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 public class LoadData
 {
+    // read "users.csv" and adds the users to the database.
     public void loadUsers() throws Exception
     {
         List<String> words;
@@ -42,6 +43,7 @@ public class LoadData
         }
     }
     
+    // reads "tweets.csv" and loads the tweets in the database.
     public void loadTwets() throws Exception
     {
         List<String> words;
@@ -72,6 +74,7 @@ public class LoadData
         }
     }
     
+    //reads "followers.csv" and adds them to the databse.
     public void loadFollows() throws Exception
     {
         List<String> words;
@@ -104,9 +107,10 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-       // l.loadUsers();
-       // l.loadTwets();
-       //l.loadFollows();
+        l.loadUsers();
+        l.loadTwets();
+        l.loadFollows();
         new api().fetchHomeTimeline("@ann", 5);
+        new api().getFollowers("@ann");
     }
 }
