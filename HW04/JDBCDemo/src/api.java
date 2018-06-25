@@ -95,13 +95,13 @@ public class api implements InterfaceAPI
         }
         return 0;
     }
-
+    
     // input: handle
     // returns: The list of Users that follow the given user.
     // example: getFollowers(@ann)
     public List<User> getFollowers(String handle)
     {
-        ArrayList<User> toReturn = new ArrayList<User>();
+        ArrayList<User> toReturn = new ArrayList();
         int user_id;
         try
         {
@@ -119,19 +119,19 @@ public class api implements InterfaceAPI
                                 "from\n" +
                                 "(\n" +
                                 "	select follower_id as 'Followees'\n" +
-                                "	from Follows\n" +
+                                "	from follows\n" +
                                 "	where Followee_id = "+ user_id +"\n" +
-                                ")as t1 join Users on(Followees = Users.user_id)\n" +
+                                ")as t1 join users on(Followees = users.user_id)\n" +
                                 "order by name;");
             while(rs.next())
             {
                 toReturn.add(Users.makeUser(
-                        rs.getString("handle"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("email"),
+                        rs.getString("handle"), 
+                        rs.getString("name"), 
+                        rs.getString("email"), 
+                        rs.getString("email"), 
                         rs.getString("discription"),
-                        Integer.parseInt(rs.getString("is_person")),
+                        Integer.parseInt(rs.getString("is_person")), 
                         Integer.parseInt(rs.getString("is_hidden"))));
             }
         }
@@ -139,18 +139,14 @@ public class api implements InterfaceAPI
         {
             e.printStackTrace();
         }
-        for(int i=0;i<toReturn.size();i++)
-        {
-            System.out.println(toReturn.get(i).getName());
-        }
         return toReturn;
     }
-
+    
     // input: User u
     // returns: 0 on success, -1 on failure.
     // effect: add the given user.
     // example: addUser(Users.make("@ann", "Ann", "ann@example.com", "password", "", 1, 0));
-    public int addUser(User u) throws Exception
+    public int addUser(User u)
     {
         try{
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
