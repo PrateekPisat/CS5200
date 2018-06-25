@@ -107,10 +107,10 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-        //l.loadUsers();
-        //l.loadTwets();
-        //l.loadFollows();
-        //new api().fetchHomeTimeline("@ann", 5);
+        l.loadUsers();
+        l.loadTwets();
+        l.loadFollows();
+        new api().fetchHomeTimeline("@ann", 5);
         new api().getFollowers("@ann");
     }
 }
