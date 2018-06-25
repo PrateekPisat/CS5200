@@ -200,11 +200,6 @@ public class api implements InterfaceAPI
         {
             toReturn.add(Tweets.makeTweet(rs.getString("Tweets"), rs.getString("handle"), rs.getString("timestamp")));
         }
-        System.out.println("Tweet by Handle");
-        for(int i=0;i<toReturn.size();i++)
-        {
-            System.out.println(toReturn.get(i).getTweet() + " by " + toReturn.get(i).getHnadle());
-        }
         return toReturn;
     }
 }
