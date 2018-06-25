@@ -18,6 +18,7 @@ public class LoadData
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
+        api a = new api();
         while(sc.hasNextLine())
         {
             s = sc.nextLine();
@@ -28,7 +29,7 @@ public class LoadData
             // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
-            if(new api().addUser(Users.makeUser(words.get(0).toString(),
+            if(a.addUser(Users.makeUser(words.get(0).toString(),
                                              words.get(1).toString() ,
                                              words.get(2).toString() ,
                                              words.get(3).toString(),
@@ -41,6 +42,7 @@ public class LoadData
             }
             words.removeAll(words);
         }
+        a.closeConnection();
     }
 
     // reads "tweets.csv" and loads the tweets in the database.
@@ -54,6 +56,7 @@ public class LoadData
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
+        api a = new api();
         while(sc.hasNextLine())
         {
             s = sc.nextLine();
@@ -64,7 +67,7 @@ public class LoadData
             // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
-            if(new api().postTweet(Tweets.makeTweet(words.get(1).toString(), words.get(0).toString(), words.get(2).toString())) == -1)
+            if(a.postTweet(Tweets.makeTweet(words.get(1).toString(), words.get(0).toString(), words.get(2).toString())) == -1)
             {
                 System.out.println("Something Went Wrong!");
                 System.exit(-1);
@@ -72,6 +75,7 @@ public class LoadData
             //System.out.println(words);
             words.removeAll(words);
         }
+        a.closeConnection();
     }
 
     //reads "followers.csv" and adds them to the databse.
@@ -85,6 +89,7 @@ public class LoadData
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
+        api a = new api();
         while(sc.hasNextLine())
         {
             s = sc.nextLine();
@@ -95,20 +100,21 @@ public class LoadData
             // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
-            if(new api().addFollower(words.get(0),words.get(1)) == -1)
+            if(a.addFollower(words.get(0),words.get(1)) == -1)
             {
                 System.out.println("Something Went Wrong!");
                 System.exit(-1);
             }
             words.removeAll(words);
         }
+        a.closeConnection();
     }
 
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
         l.loadUsers();
-        //l.loadTwets();
+        l.loadTwets();
         l.loadFollows();
         ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
         for(int i=0;i<t1.size();i++)

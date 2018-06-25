@@ -7,9 +7,13 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class api implements InterfaceAPI
 {
+    // Setting up the DBConnection
+    DBConnect dbc = new DBConnect("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
     // input: follower handle, followee handle
     // returns: 0 on success, -1 if some exception.
     // effect: the follower will follow the followee
@@ -18,7 +22,7 @@ public class api implements InterfaceAPI
     {
         int follower_id = -1, followee_id = -1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+        Connection con = dbc.getConnection();
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ follower +"'");
         if(rs.next())
@@ -45,7 +49,6 @@ public class api implements InterfaceAPI
         preparedStmt.setInt (2, followee_id);
         // execute the preparedstatement
         preparedStmt.execute();
-        con.close();
         }
         catch(SQLException e)
         {
@@ -63,7 +66,7 @@ public class api implements InterfaceAPI
     {
         int user_id=-1;
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+        Connection con = dbc.getConnection();
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ t.getHnadle() +"'");
         if(rs.next())
@@ -86,7 +89,6 @@ public class api implements InterfaceAPI
         preparedStmt.setDate (3, sqlDate);
         // execute the preparedstatement
         preparedStmt.execute();
-        con.close();
         }
         catch(SQLException e)
         {
@@ -105,7 +107,7 @@ public class api implements InterfaceAPI
         int user_id;
         try
         {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+            Connection con = dbc.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
             if(rs.next())
@@ -134,7 +136,6 @@ public class api implements InterfaceAPI
                         Integer.parseInt(rs.getString("is_person")),
                         Integer.parseInt(rs.getString("is_hidden"))));
             }
-            con.close();
         }
         catch(SQLException e)
         {
@@ -150,7 +151,7 @@ public class api implements InterfaceAPI
     public int addUser(User u)
     {
         try{
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+        Connection con = dbc.getConnection();
         String query = "INSERT INTO `Twitter`.`Users` (handle, name, email, password, discription, is_person, is_hidden) \n" +
                            "VALUES \n" +
                            "(?, ?, ?, ?, ?, ?, ?)";
@@ -166,7 +167,6 @@ public class api implements InterfaceAPI
 
         // execute the preparedstatement
         preparedStmt.execute();
-        con.close();
         }
         catch(SQLException e)
         {
@@ -183,7 +183,7 @@ public class api implements InterfaceAPI
     {
         ArrayList<Tweet> toReturn = new ArrayList<Tweet>();
         int user_id = -1;
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+        Connection con = dbc.getConnection();
         Statement st = con.createStatement();
         ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
         if(rs.next())
@@ -202,7 +202,19 @@ public class api implements InterfaceAPI
         {
             toReturn.add(Tweets.makeTweet(rs.getString("Tweets"), rs.getString("handle"), rs.getString("timestamp")));
         }
-        con.close();
+        rs.close();
         return toReturn;
+    }
+    
+    public void closeConnection()
+    {
+        try 
+        {
+            dbc.getConnection().close();
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(api.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
