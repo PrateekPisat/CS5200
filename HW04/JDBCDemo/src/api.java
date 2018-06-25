@@ -8,7 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class api
+public class api implements InterfaceAPI
 {
     // input: follower handle, followee handle
     // returns: 0 on success, -1 if some exception.
