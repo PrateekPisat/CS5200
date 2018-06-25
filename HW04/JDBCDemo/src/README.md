@@ -9,7 +9,7 @@
   ````
     java -cp mysql-connector-java-8.0.11.jar LoadData
   ````
-  - -cp links explicitly links the driver to the java file.
+  - -cp explicitly links the driver to the java file.
 
 ## Before Running the File.
 
