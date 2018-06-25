@@ -25,15 +25,15 @@ public class LoadData
             //entry.
             s = s.replace(",,", ", ,");
             StringTokenizer st1 = new StringTokenizer(s, ",");
-            // temporarily store the data of each row in a list of strings. 
+            // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
             if(new api().addUser(Users.makeUser(words.get(0).toString(),
                                              words.get(1).toString() ,
-                                             words.get(2).toString() , 
-                                             words.get(3).toString(), 
-                                             words.get(4).toString(), 
-                                             Integer.parseInt(words.get(5).toString()), 
+                                             words.get(2).toString() ,
+                                             words.get(3).toString(),
+                                             words.get(4).toString(),
+                                             Integer.parseInt(words.get(5).toString()),
                                              Integer.parseInt(words.get(6).toString()))) == -1)
             {
                 System.out.println("Something Went Wrong!");
@@ -42,7 +42,7 @@ public class LoadData
             words.removeAll(words);
         }
     }
-    
+
     // reads "tweets.csv" and loads the tweets in the database.
     public void loadTwets() throws Exception
     {
@@ -61,7 +61,7 @@ public class LoadData
             //entry.
             s = s.replace(",,", ", ,");
             StringTokenizer st1 = new StringTokenizer(s, ",");
-            // temporarily store the data of each row in a list of strings. 
+            // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
             if(new api().postTweet(Tweets.makeTweet(words.get(1).toString(), words.get(0).toString(), words.get(2).toString())) == -1)
@@ -73,7 +73,7 @@ public class LoadData
             words.removeAll(words);
         }
     }
-    
+
     //reads "followers.csv" and adds them to the databse.
     public void loadFollows() throws Exception
     {
@@ -92,7 +92,7 @@ public class LoadData
             //entry.
             s = s.replace(",,", ", ,");
             StringTokenizer st1 = new StringTokenizer(s, ",");
-            // temporarily store the data of each row in a list of strings. 
+            // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
             if(new api().addFollower(words.get(0),words.get(1)) == -1)
@@ -103,22 +103,22 @@ public class LoadData
             words.removeAll(words);
         }
     }
-    
+
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
         //l.loadUsers();
         //l.loadTwets();
         //l.loadFollows();
-        ArrayList<Tweets> t1 = new ArrayList(new api().fetchHomeTimeline("@ann", 2));
+        ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
         for(int i=0;i<t1.size();i++)
         {
-            System.out.println(t1.get(i).post + " by " + t1.get(i).handle);
+            System.out.println(t1.get(i).getTweet() + " by " + t1.get(i).getHnadle());
         }
-        ArrayList<User> s = new ArrayList(new api().getFollowers("@ann"));
-        for(int i=0;i<s.size();i++)
-        {
-            System.out.println(s.get(i).getName());
-        }
+        // ArrayList<User> s = new ArrayList<User>(new api().getFollowers("@ann"));
+        // for(int i=0;i<s.size();i++)
+        // {
+        //     System.out.println(s.get(i).getName());
+        // }
     }
 }
