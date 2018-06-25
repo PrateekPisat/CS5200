@@ -82,4 +82,3 @@ from
 )as t1, follows, users
 where follows.Follower_id = Followees  and Followee_id = users.user_id
 group by Followers_of_Followers;
-
