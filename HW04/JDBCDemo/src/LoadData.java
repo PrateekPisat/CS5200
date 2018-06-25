@@ -107,18 +107,18 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-        //l.loadUsers();
+        l.loadUsers();
         //l.loadTwets();
-        //l.loadFollows();
+        l.loadFollows();
         ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
         for(int i=0;i<t1.size();i++)
         {
             System.out.println(t1.get(i).getTweet() + " by " + t1.get(i).getHnadle());
         }
-        // ArrayList<User> s = new ArrayList<User>(new api().getFollowers("@ann"));
-        // for(int i=0;i<s.size();i++)
-        // {
-        //     System.out.println(s.get(i).getName());
-        // }
+         ArrayList<User> s = new ArrayList<User>(new api().getFollowers("@ann"));
+         for(int i=0;i<s.size();i++)
+         {
+             System.out.println(s.get(i).getName());
+         }
     }
 }

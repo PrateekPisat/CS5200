@@ -134,6 +134,7 @@ public class api implements InterfaceAPI
                         Integer.parseInt(rs.getString("is_person")),
                         Integer.parseInt(rs.getString("is_hidden"))));
             }
+            con.close();
         }
         catch(SQLException e)
         {
@@ -165,6 +166,7 @@ public class api implements InterfaceAPI
 
         // execute the preparedstatement
         preparedStmt.execute();
+        con.close();
         }
         catch(SQLException e)
         {
@@ -200,6 +202,7 @@ public class api implements InterfaceAPI
         {
             toReturn.add(Tweets.makeTweet(rs.getString("Tweets"), rs.getString("handle"), rs.getString("timestamp")));
         }
+        con.close();
         return toReturn;
     }
 }
