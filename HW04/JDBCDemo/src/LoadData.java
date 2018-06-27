@@ -7,14 +7,17 @@ import java.util.StringTokenizer;
 
 public class LoadData
 {
-    // read "users.csv" and adds the users to the database.
+    // loadUsers
+    // Effect : read "users.csv" and adds the users to the database.
+    // example: new LoadData().loadUsers();
     public void loadUsers() throws Exception
     {
         List<String> words;
         String s;
         //The Balance of each record is grouped into three lists
         ArrayList<User> users = new ArrayList<User>();
-        File f = new File(System.getProperty("user.dir")+ File.separator + "users.csv");
+        File f = new File(System.getProperty("user.dir")+ File.separator +
+                                             "users.csv");
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
@@ -30,12 +33,14 @@ public class LoadData
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
             if(a.addUser(Users.makeUser(words.get(0).toString(),
-                                             words.get(1).toString() ,
-                                             words.get(2).toString() ,
-                                             words.get(3).toString(),
-                                             words.get(4).toString(),
-                                             Integer.parseInt(words.get(5).toString()),
-                                             Integer.parseInt(words.get(6).toString()))) == -1)
+                                        words.get(1).toString() ,
+                                        words.get(2).toString() ,
+                                        words.get(3).toString(),
+                                        words.get(4).toString(),
+                                        Integer.parseInt(
+                                          words.get(5).toString()),
+                                        Integer.parseInt(
+                                          words.get(6).toString()))) == -1)
             {
                 System.out.println("Something Went Wrong!");
                 System.exit(-1);
@@ -45,14 +50,17 @@ public class LoadData
         a.closeConnection();
     }
 
-    // reads "tweets.csv" and loads the tweets in the database.
-    public void loadTwets() throws Exception
+    // loadTwets
+    // effect : reads "tweets.csv" and loads the tweets in the database.
+    // example : new LoadData().loadTweets();
+    public void loadTweets() throws Exception
     {
         List<String> words;
         String s;
         //The Balance of each record is grouped into three lists
         ArrayList<User> users = new ArrayList<User>();
-        File f = new File(System.getProperty("user.dir")+ File.separator + "tweets.csv");
+        File f = new File(System.getProperty("user.dir") + File.separator +
+                                             "tweets.csv");
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
@@ -67,7 +75,9 @@ public class LoadData
             // temporarily store the data of each row in a list of strings.
             while(st1.hasMoreTokens())
                 words.add(st1.nextToken());
-            if(a.postTweet(Tweets.makeTweet(words.get(1).toString(), words.get(0).toString(), words.get(2).toString())) == -1)
+            if(a.postTweet(Tweets.makeTweet(words.get(1).toString(),
+                                            words.get(0).toString(),
+                                            words.get(2).toString())) == -1)
             {
                 System.out.println("Something Went Wrong!");
                 System.exit(-1);
@@ -78,14 +88,17 @@ public class LoadData
         a.closeConnection();
     }
 
-    //reads "followers.csv" and adds them to the databse.
+    // loadFollows
+    // Effect : reads "followers.csv" and adds them to the databse.
+    // Example : new LoadData().loadFollows();
     public void loadFollows() throws Exception
     {
         List<String> words;
         String s;
         //The Balance of each record is grouped into three lists
         ArrayList<User> users = new ArrayList<User>();
-        File f = new File(System.getProperty("user.dir")+ File.separator + "followers.csv");
+        File f = new File(System.getProperty("user.dir")+ File.separator +
+                                             "followers.csv");
         Scanner sc = new Scanner(f);
         sc.nextLine();
         words = new ArrayList<String>();
@@ -113,18 +126,18 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-        //l.loadUsers();
-        //l.loadTwets();
-        //l.loadFollows();
+        l.loadUsers();
+        l.loadTweets();
+        l.loadFollows();
         ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
-        for(int i=0;i<t1.size();i++)
+        for(Tweet t : t1)
         {
-            System.out.println(t1.get(i).getTweet() + " by " + t1.get(i).getHnadle());
+            System.out.println(t.getTweet() + " by " + t.getHandle());
         }
          ArrayList<User> s = new ArrayList<User>(new api().getFollowers("@ann"));
-         for(int i=0;i<s.size();i++)
+         for(User u : s)
          {
-             System.out.println(s.get(i).getName());
+             System.out.println(u.getName());
          }
     }
 }

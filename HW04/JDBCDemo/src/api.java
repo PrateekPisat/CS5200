@@ -13,7 +13,10 @@ import java.util.logging.Logger;
 public class api implements InterfaceAPI
 {
     // Setting up the DBConnection
-    DBConnect dbc = new DBConnect("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false");
+    DBConnect dbc = new DBConnect(
+    "jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false");
+
+    // addFollower : String String -> int
     // input: follower handle, followee handle
     // returns: 0 on success, -1 if some exception.
     // effect: the follower will follow the followee
@@ -24,7 +27,8 @@ public class api implements InterfaceAPI
         try{
         Connection con = dbc.getConnection();
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ follower +"'");
+        ResultSet rs = st.executeQuery("select user_id from Users \n" +
+                                       "where handle = '"+ follower +"'");
         if(rs.next())
             follower_id = Integer.parseInt(rs.getString("user_id"));
         else
@@ -32,7 +36,8 @@ public class api implements InterfaceAPI
             System.out.println(follower + " Does not exist!");
             return -1;
         }
-        rs = st.executeQuery("select user_id from Users where handle = '"+ followee +"'");
+        rs = st.executeQuery("select user_id from Users \n"+
+                             "where handle = '"+ followee +"'");
         if(rs.next())
             followee_id = Integer.parseInt(rs.getString("user_id"));
         else
@@ -58,22 +63,24 @@ public class api implements InterfaceAPI
         return 0;
     }
 
+    // intPostTweet : Tweet -> int
     // input: user handle, tweet
     // returns: 0 on success, -1 on failure.
     // effect: the said tweet will be posted
     // example: postTweet(@ann, "I love Northeastern #neu")
-    public int postTweet(Tweet t) throws ParseException
+    public int postTweet(Tweet t)
     {
         int user_id=-1;
         try{
         Connection con = dbc.getConnection();
         Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ t.getHnadle() +"'");
+        ResultSet rs = st.executeQuery("select user_id from Users \n" +
+                                       "where handle = '"+ t.getHandle() +"'");
         if(rs.next())
             user_id = Integer.parseInt(rs.getString("user_id"));
         else
         {
-            System.out.println(t.getHnadle()+"Does not exist!, This");
+            System.out.println(t.getHandle()+"Does not exist!, This");
             return -1;
         }
         String query = "INSERT INTO `Twitter`.`Tweets` (user_id, post, timestamp) \n" +
@@ -95,9 +102,14 @@ public class api implements InterfaceAPI
             e.printStackTrace();
             //return -1;
         }
+        catch(ParseException e)
+        {
+          e.printStackTrace();
+        }
         return 0;
     }
 
+    // getFollowers : Sring -> List<User>
     // input: handle
     // returns: The list of Users that follow the given user.
     // example: getFollowers(@ann)
@@ -109,7 +121,8 @@ public class api implements InterfaceAPI
         {
             Connection con = dbc.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
+            ResultSet rs = st.executeQuery("select user_id from Users \n" +
+                                           "where handle = '"+ handle +"'");
             if(rs.next())
                 user_id = Integer.parseInt(rs.getString("user_id"));
             else
@@ -117,7 +130,8 @@ public class api implements InterfaceAPI
                 System.out.println(handle + " Does not exist!");
                 return null;
             }
-            rs = st.executeQuery("select name, handle, email, password, discription, is_person, is_hidden\n" +
+            rs = st.executeQuery("select name, handle, email, password, " +
+                                "discription, is_person, is_hidden\n" +
                                 "from\n" +
                                 "(\n" +
                                 "	select follower_id as 'Followees'\n" +
@@ -144,6 +158,7 @@ public class api implements InterfaceAPI
         return toReturn;
     }
 
+    // addUser : User -> int
     // input: User u
     // returns: 0 on success, -1 on failure.
     // effect: add the given user.
@@ -152,7 +167,8 @@ public class api implements InterfaceAPI
     {
         try{
         Connection con = dbc.getConnection();
-        String query = "INSERT INTO `Twitter`.`Users` (handle, name, email, password, discription, is_person, is_hidden) \n" +
+        String query = "INSERT INTO `Twitter`.`Users` (handle, name, email, "+
+                       "password, discription, is_person, is_hidden) \n" +
                            "VALUES \n" +
                            "(?, ?, ?, ?, ?, ?, ?)";
         // create the mysql insert preparedstatement
@@ -176,43 +192,56 @@ public class api implements InterfaceAPI
         return 0;
     }
 
+    // fetchHomeTimeline : String int -> List<Tweet>
     // input: String handle, int number of tweets
     // returns: List of Users
     // example: fetchHomeTimeline("@ann", 5)
-    public List<Tweet> fetchHomeTimeline(String handle, int maxReturned) throws Exception
+    public List<Tweet> fetchHomeTimeline(String handle, int maxReturned)
     {
         ArrayList<Tweet> toReturn = new ArrayList<Tweet>();
-        int user_id = -1;
-        Connection con = dbc.getConnection();
-        Statement st = con.createStatement();
-        ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
-        if(rs.next())
-            user_id = Integer.parseInt(rs.getString("user_id"));
-        rs = st.executeQuery("select post as 'Tweets', handle, timestamp\n" +
-                "from\n" +
-                "(\n" +
-                "	select followee_id\n" +
-                "	from Follows\n" +
-                "	where follower_id = "+user_id+"\n" +
-                ") as t1, Tweets, Users\n" +
-                "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
-                "order by Tweets.timestamp desc, handle\n" +
-                "limit " + maxReturned + ";");
-        while(rs.next())
+        try
         {
-            toReturn.add(Tweets.makeTweet(rs.getString("Tweets"), rs.getString("handle"), rs.getString("timestamp")));
+          int user_id = -1;
+          Connection con = dbc.getConnection();
+          Statement st = con.createStatement();
+          ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
+          if(rs.next())
+              user_id = Integer.parseInt(rs.getString("user_id"));
+          rs = st.executeQuery("select post as 'Tweets', handle, timestamp\n" +
+                  "from\n" +
+                  "(\n" +
+                  "	select followee_id\n" +
+                  "	from Follows\n" +
+                  "	where follower_id = "+user_id+"\n" +
+                  ") as t1, Tweets, Users\n" +
+                  "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
+                  "order by Tweets.timestamp desc, handle\n" +
+                  "limit " + maxReturned + ";");
+          while(rs.next())
+          {
+              toReturn.add(Tweets.makeTweet(rs.getString("Tweets"),
+                                            rs.getString("handle"),
+                                            rs.getString("timestamp")));
+          }
+          rs.close();
         }
-        rs.close();
+        catch(SQLException e)
+        {
+          e.printStackTrace();
+        }
         return toReturn;
     }
-    
+
+    // closeConnection
+    // effect: closes the connection to the database
+    // example: closeConnection();
     public void closeConnection()
     {
-        try 
+        try
         {
             dbc.getConnection().close();
-        } 
-        catch (SQLException ex) 
+        }
+        catch (SQLException ex)
         {
             Logger.getLogger(api.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Prateek
- */
 public interface Tweet {
-    //Returns the tweet
+    // getTweet() : -> String
+    // Returns: the text of the tweet
+    // Example: makeTweet("@ann", "HEllo", 2018-06-29 12:52:23).getTweet(); -> "HEllo";
     String getTweet();
-    
-    //Returns the twitter handle of the user who posted this tweet
-    String getHnadle();
-    //Returns the timestamp
+    // getHandle() : -> String
+    //Returns : the twitter handle of the user who posted this tweet
+    // Example: makeTweet("@ann", "HEllo", 2018-06-29 12:52:23).getHandle(); -> "@ann";
+    String getHandle();
+    // getTimestamp : -> String
+    //Returns : the timestamp when the tweet
+    // Example: makeTweet("@ann", "HEllo", 2018-06-29 12:52:23).getTimestamp(); -> 2018-06-29 12:52:23;
     String getTimestamp();
 }

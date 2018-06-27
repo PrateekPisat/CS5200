@@ -9,18 +9,32 @@
  * @author Prateek
  */
 public interface User {
-    //Returns the user name
+    // getName : -> String
+    // returns : the name of this user
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getName() -> "Ann"
     String getName();
-    //return the user handle
+    // getHandle : -> String
+    // returns : the handle of this user.
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getHandle() -> "@ann"
     String getHandle();
-    //returns the user email
+    // getEmail : -> String
+    // returns : the email-id of this user
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getEmail() -> "ann@example.com"
     String getEmail();
-    //returns the user password
+    // getPassword
+    // returns : the password of this user
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getPassword() -> "Password"
     String getPassword();
-    //returns the user Descrpition
+    // getDesc : -> String
+    // returns : the discription of the user
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getDesc() -> ""
     String getDesc();
-    //returns 1 for user, 0 for organization
+    // isUser : -> String
+    // returns : 1 if the user is a person, 0 if the user represents an organization
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getisUser() -> 1
     int isUser();
-    //returns 1 for hidden, 0 otherwise
+    // isHidden : -> String
+    // returns : 1 is the user profile is hidden, 0 if not.
+    // example : makeUser("@ann", "Ann","ann@example.com", "Password", "", 1, 0). getisHidden() -> 0
     int isHidden();
 }
