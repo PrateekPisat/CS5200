@@ -1,18 +1,12 @@
-package assignment4;
-
 import java.util.ArrayList;
-
 public class Assignment4 {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception{
-        // TODO code application logic here
+    public static void main(String[] args) throws Exception
+    {
         LoadData l = new LoadData();
-        //l.loadUsers();
+        l.loadUsers();
         l.loadTweets();
-        //l.loadFollows();
+        l.loadFollows();
         ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
         for(Tweet t : t1)
         {
@@ -24,5 +18,5 @@ public class Assignment4 {
              System.out.println(u.getName());
          }
     }
-    
+
 }

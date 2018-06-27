@@ -7,7 +7,7 @@
   ````
   - Execute with:
   ````
-    java -cp mysql-connector-java-8.0.11.jar Assignment4
+    java -cp .:mysql-connector-java-8.0.11.jar Assignment4
   ````
   - -cp explicitly links the driver to the java file.
 
