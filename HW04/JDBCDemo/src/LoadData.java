@@ -113,9 +113,9 @@ public class LoadData
     public static void main(String ar[]) throws Exception
     {
         LoadData l = new LoadData();
-        l.loadUsers();
-        l.loadTwets();
-        l.loadFollows();
+        //l.loadUsers();
+        //l.loadTwets();
+        //l.loadFollows();
         ArrayList<Tweet> t1 = new ArrayList<Tweet>(new api().fetchHomeTimeline("@ann", 5));
         for(int i=0;i<t1.size();i++)
         {

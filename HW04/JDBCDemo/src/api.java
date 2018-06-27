@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class api implements InterfaceAPI
 {
     // Setting up the DBConnection
-    DBConnect dbc = new DBConnect("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false", "Prateek", "Pradnya&1");
+    DBConnect dbc = new DBConnect("jdbc:mysql://localhost:3306/Twitter?autoReconnect=true&useSSL=false");
     // input: follower handle, followee handle
     // returns: 0 on success, -1 if some exception.
     // effect: the follower will follow the followee
