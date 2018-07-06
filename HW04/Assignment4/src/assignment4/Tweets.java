@@ -1,4 +1,6 @@
 package assignment4;
+
+
 public class Tweets implements Tweet
 {
     String post, handle, timestamp;

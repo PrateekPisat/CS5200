@@ -1,4 +1,6 @@
 package assignment4;
+
+
 public interface Tweet {
     // getTweet() : -> String
     // Returns: the text of the tweet

@@ -1,4 +1,6 @@
 package assignment4;
+
+
 public interface User {
     // getName : -> String
     // returns : the name of this user

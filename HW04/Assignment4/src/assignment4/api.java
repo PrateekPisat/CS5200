@@ -1,4 +1,5 @@
 package assignment4;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -56,6 +57,8 @@ public class api implements InterfaceAPI
         preparedStmt.setInt (2, followee_id);
         // execute the preparedstatement
         preparedStmt.execute();
+        st.close();
+        rs.close();
         }
         catch(SQLException e)
         {
@@ -97,6 +100,8 @@ public class api implements InterfaceAPI
         preparedStmt.setTimestamp(3, new Timestamp(date1.getTime()));
         // execute the preparedstatement
         preparedStmt.execute();
+        st.close();
+        rs.close();
         }
         catch(SQLException e)
         {
@@ -151,6 +156,8 @@ public class api implements InterfaceAPI
                         Integer.parseInt(rs.getString("is_person")),
                         Integer.parseInt(rs.getString("is_hidden"))));
             }
+            st.close();
+            rs.close();
         }
         catch(SQLException e)
         {
@@ -202,29 +209,30 @@ public class api implements InterfaceAPI
         ArrayList<Tweet> toReturn = new ArrayList<Tweet>();
         try
         {
-          int user_id = -1;
-          Connection con = dbc.getConnection();
-          Statement st = con.createStatement();
-          ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
-          if(rs.next())
-              user_id = Integer.parseInt(rs.getString("user_id"));
-          rs = st.executeQuery("select post as 'Tweets', handle, timestamp\n" +
-                  "from\n" +
-                  "(\n" +
-                  "	select followee_id\n" +
-                  "	from Follows\n" +
-                  "	where follower_id = "+user_id+"\n" +
-                  ") as t1, Tweets, Users\n" +
-                  "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
-                  "order by Tweets.timestamp desc, handle\n" +
-                  "limit " + maxReturned + ";");
-          while(rs.next())
-          {
-              toReturn.add(Tweets.makeTweet(rs.getString("Tweets"),
-                                            rs.getString("handle"),
-                                            rs.getString("timestamp")));
-          }
-          rs.close();
+            int user_id = -1;
+            Connection con = dbc.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select user_id from Users where handle = '"+ handle +"'");
+            if(rs.next())
+                user_id = Integer.parseInt(rs.getString("user_id"));
+            rs = st.executeQuery("select post as 'Tweets', handle, timestamp\n" +
+                    "from\n" +
+                    "(\n" +
+                    "	select followee_id\n" +
+                    "	from Follows\n" +
+                    "	where follower_id = "+user_id+"\n" +
+                    ") as t1, Tweets, Users\n" +
+                    "where Tweets.user_id = t1.followee_id and Users.user_id = Tweets.user_id\n" +
+                    "order by Tweets.timestamp desc, handle\n" +
+                    "limit " + maxReturned + ";");
+            while(rs.next())
+            {
+                toReturn.add(Tweets.makeTweet(rs.getString("Tweets"),
+                                              rs.getString("handle"),
+                                              rs.getString("timestamp")));
+            }
+            st.close();
+            rs.close();
         }
         catch(SQLException e)
         {
@@ -244,7 +252,7 @@ public class api implements InterfaceAPI
         }
         catch (SQLException ex)
         {
-            Logger.getLogger(api.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 }
