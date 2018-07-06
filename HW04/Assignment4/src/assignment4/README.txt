@@ -2,13 +2,12 @@
 
  Instructions to execute
   - compile with:
-  ````
-    javac Assignment4.java LoadData.java api.java Users.java Tweets.java
-  ````
+
+    javac assignment4/*.java
+
   - Execute with:
-  ````
-    java -cp mysql-connector-java-8.0.11.jar Assignment4
-  ````
+
+    java -cp .:mysql-connector-java-8.0.11.jar assignment4.Assignment4
 
  Before Running the File.
 
@@ -18,3 +17,11 @@
   - Additionally, I have provided an SQL script that deletes user "Bob" from the database, to avoid the confusion, or if this assignment is run on a blank database, this situation won't arise in the first place.
   -Either Ways, I have provided with all the necessary steps to ensure that this confusion doesn't affect the usability of my code.
 
+ File Descriptions:
+api.java : This file contains all the api methods.
+Assignment4.java: this is the main class file. Execute the program with this file.
+DBConnect.java: includes all the DB connectivity methods.
+Tweet.java: the interface for the Tweet ADT.
+Tweets.java: This file provides an implementation for the Tweet interface.
+User.java: the interface for the user ADT.
+Users.java: This file provides an implementation for the User interface.
