@@ -1,0 +1,13 @@
+follower,followee
+@ann,@bob
+@ann,@cid
+@ann,@dee
+@ann,@IBM
+@bob,@IBM
+@cid,@ann
+@cid,@IBM
+@edi,@ann
+@edi,@bob
+@edi,@cid
+@edi,@IBM
+@IBM,@ann

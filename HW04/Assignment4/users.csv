@@ -1,0 +1,7 @@
+handle,fullname,email,password,profile,is_person,is_hidden
+@ann,Ann Smith,ann@gmail.com,kittyk@t,I like cats,1,0
+@bob,Bob Jones,bob@gmail.com,sc@l@r00ls,Software Developer,1,0
+@cid,Cid Nee,cid@gmail.com,s3cr3t,,1,1
+@dee,Dee Johnson,dee@gmail.com,ddddd,,1,0
+@edi,Edi Olefson,edi@gmail.com,abc123,Olefson Security Consulting,1,0
+@IBM,IBM,info@ibm.com,ibmr00ls,Software and Services,0,0
