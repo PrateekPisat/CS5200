@@ -3,29 +3,16 @@ use Splitwise;
 INSERT INTO `Splitwise`.`Users` 
 (`Users_id`, `Name`, `Email`, `Password`, `Budget`, `Phone`, `Hide_Data`) 
 VALUES 
-(1, 'Prateek Pisat', 'prateekpisat@example.com', 'Password', -1, NULL, 0),
-(2, 'Gaurav Bapat', 'gauravbapat@example.com', 'Password', -1, NULL, 0),
-(3, 'Harshad Sathaye', 'harshadsathaye@example.com', 'Password', -1, NULL, 0),
-(4, 'Rohan Chouthai', 'rohanchouthai@example.com', 'Password', -1, NULL, 0),
-(5, 'Indrajeet Mahajan', 'indrajeetmahajan@example.com', 'Password', -1, NULL, 0),
-(6, 'Rohan Phadke', 'rohanphadke@example.com', 'Password', -1, NULL, 0);
+(1, 'Alice', 'alice@example.com', 'Password', -1, NULL, 0),
+(2, 'Bob', 'bob@example.com', 'Password', -1, NULL, 0),
+(3, 'Carol', 'carol@example.com', 'Password', -1, NULL, 0),
+(4, 'David', 'david@example.com', 'Password', -1, NULL, 0),
+(5, 'Eric', 'eric@example.com', 'Password', -1, NULL, 0),
+(6, 'Frank', 'frank@example.com', 'Password', -1, NULL, 0);
 
 select * from Users;
-update Users set Name = 'Alice', Email = 'alice@example.com'
-where Users_id = 1;
-update Users set Name = 'Bob', Email = 'bob@example.com'
-where Users_id = 2;
-update Users set Name = 'Carol',Email = 'carol@example.com'
-where Users_id = 3;
-update Users set Name = 'David', Email = 'david@example.com'
-where Users_id = 4;
-update Users set Name = 'Eric', Email = 'eric@example.com'
-where Users_id = 5;
-update Users set Name = 'Frank', Email = 'frank@example.com'
-where Users_id = 6;
-update Users set Name = 'Gail', Email = 'gail@example.com'
-where Users_id = 7;
 
+/*
 
 INSERT INTO `Splitwise`.`Bills` 
 (`Bills_id`, `Name`, `Date`, `Description`, `Paid_By`)
@@ -129,7 +116,4 @@ VALUES
 select *
 from ledger
 order by Bills_id, Amount;
-
-select count(Bills_Id) as 'Pneding Requests'
-from Bills join bill_requests using(Bills_id)
-where Paid_By = 1;
+*/
