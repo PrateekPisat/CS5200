@@ -7,7 +7,7 @@ public class ShowBillRequests extends javax.swing.JFrame {
     int user_id;
     List<Bill> userBills;
     Bill currentBill;
-    int current = -1;
+    int current = 0;
     public ShowBillRequests() {
         initComponents();
     }
@@ -15,14 +15,15 @@ public class ShowBillRequests extends javax.swing.JFrame {
     public ShowBillRequests(int user_id) {
         initComponents();
         api a = new api();
+        this.user_id = user_id;
         userBills = a.getBillRequestsFor(user_id);
-        ++current;
         currentBill = userBills.get(current);
         Id.setText(Integer.toString(currentBill.getBillId()));
         Date.setText(currentBill.getDate().toString());
         Name.setText(currentBill.getBillName());
         WelcomeLabel.setText(WelcomeLabel.getText() + currentBill.getBillName());
         PaidBy.setText(a.getUserName(currentBill.getPaidBy()));
+        Desc.setText(currentBill.getDescription());
         a.closeConnection();
     }
 
@@ -47,7 +48,6 @@ public class ShowBillRequests extends javax.swing.JFrame {
         PaidBy = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 300));
         setResizable(false);
 
         WelcomeLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -63,7 +63,7 @@ public class ShowBillRequests extends javax.swing.JFrame {
 
         DateLabel.setText("Bill Date:");
 
-        BillDesc.setText("Bill No:");
+        BillDesc.setText("Bill Desc");
 
         ParticipateButton.setText("Participate");
         ParticipateButton.addActionListener(new java.awt.event.ActionListener() {
@@ -174,6 +174,8 @@ public class ShowBillRequests extends javax.swing.JFrame {
 
     private void ParticipateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ParticipateButtonActionPerformed
         // TODO add your handling code here:
+        this.setVisible(false);
+        new FillBillRequest(currentBill.getBillId(), user_id).setVisible(true);
     }//GEN-LAST:event_ParticipateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
@@ -182,8 +184,9 @@ public class ShowBillRequests extends javax.swing.JFrame {
         int res = a.deleteRequest(userBills.get(current).getBillId(), user_id);
         if(res==1)
         {
-          if(++current < userBills.size())
+          if(current+1 < userBills.size())
             {
+                ++current;
                 this.currentBill = userBills.get(current);
                 updateContents();
             }
@@ -198,11 +201,14 @@ public class ShowBillRequests extends javax.swing.JFrame {
 
     private void NextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextButtonActionPerformed
         // TODO add your handling code here:
-        if(++current < userBills.size())
+        if(current+1 < userBills.size())
         {
+            ++current;
             this.currentBill = userBills.get(current);
             updateContents();
         }
+        else
+            NextButton.setEnabled(false);
     }//GEN-LAST:event_NextButtonActionPerformed
 
     private void updateContents()

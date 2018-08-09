@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `Splitwise`.`Share` (
   `Bills_id` INT NOT NULL,
   `Item_id` INT NOT NULL,
   `Users_id` INT NOT NULL,
-  `Is_Paid` TINYINT,
+  `Is_Paid` TINYINT DEFAULT 0,
   PRIMARY KEY (`Bills_id`, `Item_id`, `Users_id`),
   INDEX `Items_idx` (`Item_id` ASC),
   INDEX `Users_idx` (`Users_id` ASC),
@@ -141,14 +141,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Splitwise`.`Ledger` ;
 
 CREATE TABLE IF NOT EXISTS `Splitwise`.`Ledger` (
-  `Bill_id` INT NOT NULL,
+  `Bills_id` INT NOT NULL,
   `Item_id` INT NOT NULL,
   `Amount` FLOAT NOT NULL DEFAULT 0.00,
-  PRIMARY KEY (`Bill_id`, `Item_id`),
-  INDEX `Bill_idx` (`Bill_id` ASC),
+  PRIMARY KEY (`Bills_id`, `Item_id`),
+  INDEX `Bills_idx` (`Bills_id` ASC),
   INDEX `Items_idx` (`Item_id` ASC),
   CONSTRAINT `Ledger_Bill`
-    FOREIGN KEY (`Bill_id`)
+    FOREIGN KEY (`Bills_id`)
     REFERENCES `Splitwise`.`Bills` (`Bills_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
@@ -159,6 +159,17 @@ CREATE TABLE IF NOT EXISTS `Splitwise`.`Ledger` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- ALTER TABLE `splitwise`.`ledger` 
+-- DROP FOREIGN KEY `Ledger_Bill`;
+-- ALTER TABLE `splitwise`.`ledger` 
+-- CHANGE COLUMN `Bill_id` `Bills_id` INT(11) NOT NULL ;
+-- ALTER TABLE `splitwise`.`ledger` 
+-- ADD CONSTRAINT `Ledger_Bill`
+-- FOREIGN KEY (`Bills_id`)
+  -- REFERENCES `splitwise`.`bills` (`bills_id`)
+  -- ON DELETE CASCADE
+  -- ON UPDATE CASCADE;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

@@ -11,10 +11,21 @@ VALUES
 (6, 'Rohan Phadke', 'rohanphadke@example.com', 'Password', -1, NULL, 0);
 
 select * from Users;
+update Users set Name = 'Alice', Email = 'alice@example.com'
+where Users_id = 1;
+update Users set Name = 'Bob', Email = 'bob@example.com'
+where Users_id = 2;
+update Users set Name = 'Carol',Email = 'carol@example.com'
+where Users_id = 3;
+update Users set Name = 'David', Email = 'david@example.com'
+where Users_id = 4;
+update Users set Name = 'Eric', Email = 'eric@example.com'
+where Users_id = 5;
+update Users set Name = 'Frank', Email = 'frank@example.com'
+where Users_id = 6;
+update Users set Name = 'Gail', Email = 'gail@example.com'
+where Users_id = 7;
 
-update users
-set budget = -1
-where 1=1;
 
 INSERT INTO `Splitwise`.`Bills` 
 (`Bills_id`, `Name`, `Date`, `Description`, `Paid_By`)
@@ -24,8 +35,7 @@ VALUES
 
 select * from Bills;
 
-delete from bills where Bills_id in (13);
-
+delete from bills where 1=1;
 
 INSERT INTO `Splitwise`.`Bill_Items` 
 (`Item_id`, `Bills_id`, `Name`, `Cost`) 
@@ -51,9 +61,6 @@ select *
 from Bill_Items
 order by Bills_id;
 
-delete from Bill_Items
-where Bills_id = 13;
-
 INSERT INTO `Splitwise`.`Bill_Requests` 
 (`To_id`, `Bills_id`) 
 VALUES 
@@ -67,49 +74,45 @@ VALUES
 (5, 1),
 (6, 1);
 
-select count(Bills_id) as 'Pending Requests'
-from Bill_Requests
-where To_id=9;
-
 select * 
 from Bill_Requests
 order by Bills_id;
 
 INSERT INTO `Splitwise`.`Share` 
-(`Bills_id`, `Item_id`, `Users_id`) 
+(`Bills_id`, `Item_id`, `Users_id`, `Is_Paid`) 
 VALUES 
-(2, 1, 4),
-(2, 1, 6),
-(2, 2, 4),
-(2, 3, 4),
-(2, 3, 6),
-(2, 4, 3),
-(2, 4, 4),
-(2, 4, 6),
-(1, 1, 1),
-(1, 1, 2),
-(1, 2, 1),
-(1, 2, 2),
-(1, 3, 1),
-(1, 3, 2),
-(1, 4, 1),
-(1, 5, 1),
-(1, 6, 1),
-(1, 6, 2),
-(1, 7, 1),
-(1, 8, 1),
-(1, 9, 1),
-(1, 9, 2),
-(1, 10, 1),
-(1, 11, 1),
-(1, 12, 1);
+(2, 1, 4, 0),
+(2, 1, 6, 0),
+(2, 2, 4, 0),
+(2, 3, 4, 0),
+(2, 3, 6, 0),
+(2, 4, 3, 0),
+(2, 4, 4, 0),
+(2, 4, 6, 0),
+(1, 1, 1, 0),
+(1, 1, 2, 0),
+(1, 2, 1, 0),
+(1, 2, 2, 0),
+(1, 3, 1, 0),
+(1, 3, 2, 0),
+(1, 4, 1, 0),
+(1, 5, 1, 0),
+(1, 6, 1, 0),
+(1, 6, 2, 0),
+(1, 7, 1, 0),
+(1, 8, 1, 0),
+(1, 9, 1, 0),
+(1, 9, 2, 0),
+(1, 10, 1, 0),
+(1, 11, 1, 0),
+(1, 12, 1, 0);
 
 select *
 from share
-order by Bills_id;
+order by Users_id;
 
 INSERT INTO `Splitwise`.`Ledger` 
-(`Bill_id`, `Item_id`, `Amount`) 
+(`Bills_id`, `Item_id`, `Amount`) 
 VALUES 
 (1, 1, 1.94),
 (1, 4, 2.64),
@@ -125,5 +128,8 @@ VALUES
 
 select *
 from ledger
-order by Bill_id, Amount;
+order by Bills_id, Amount;
 
+select count(Bills_Id) as 'Pneding Requests'
+from Bills join bill_requests using(Bills_id)
+where Paid_By = 1;

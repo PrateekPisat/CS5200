@@ -49,6 +49,7 @@ public class NewBillForm extends javax.swing.JFrame {
         ErrorProvider = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(350, 520));
 
         WelcomeHeader.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         WelcomeHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -99,7 +100,7 @@ public class NewBillForm extends javax.swing.JFrame {
                                             .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(52, 52, 52))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(Date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(Date, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(Calender, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -121,7 +122,7 @@ public class NewBillForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(WelcomeHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(ErrorProvider, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                .addComponent(ErrorProvider, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -151,7 +152,7 @@ public class NewBillForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BackButtonActionPerformed
 
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-        // TODO add your handling code here:
+//        // TODO add your handling code here:
         api a = new api();
         int res;
         res = a.createBill(BillName.getText(), Description.getText(), user_id, new Timestamp(Calender.getCalendar().getTimeInMillis()));
@@ -172,6 +173,7 @@ public class NewBillForm extends javax.swing.JFrame {
             this.setVisible(false);
             new AddBillItems(res).setVisible(true);
         }
+        //System.out.println(new Timestamp(Calender.getCalendar().getTimeInMillis()).toString());
     }//GEN-LAST:event_CreateButtonActionPerformed
 
     /**
