@@ -155,8 +155,8 @@ CREATE TABLE IF NOT EXISTS `Splitwise`.`Ledger` (
   CONSTRAINT `Items`
     FOREIGN KEY (`Item_id`)
     REFERENCES `Splitwise`.`Bill_Items` (`Item_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

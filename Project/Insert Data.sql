@@ -117,3 +117,9 @@ select *
 from ledger
 order by Bills_id, Amount;
 */
+
+select *
+from share join bills using(bills_id) join bill_items using(bills_id, item_id)
+where MONTH(Date) = MONTH(dateadd(dd, -1, GetDate()))
+AND
+YEAR(Date) = YEAR(dateadd(dd, -1, GetDate()));
