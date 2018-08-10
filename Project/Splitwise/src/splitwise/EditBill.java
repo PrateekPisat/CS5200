@@ -17,6 +17,12 @@ public class EditBill extends javax.swing.JFrame {
         initComponents();
         this.bill_id = bill_id;
         this.user_id = user_id;
+        api a = new api();
+        thisBill = a.getBill(bill_id);
+        this.BillName.setText(thisBill.getBillName());
+        this.Description.setText(thisBill.getDescription());
+        this.Calender.setDate(thisBill.getDate());
+        a.closeConnection();
     }
 
 

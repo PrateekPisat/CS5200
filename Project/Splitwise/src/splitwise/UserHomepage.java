@@ -79,6 +79,8 @@ public class UserHomepage extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         LoadPreviousButton = new javax.swing.JButton();
+        EditButton = new javax.swing.JButton();
+        DeleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(850, 600));
@@ -193,6 +195,20 @@ public class UserHomepage extends javax.swing.JFrame {
             }
         });
 
+        EditButton.setText("Edit Profile");
+        EditButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditButtonActionPerformed(evt);
+            }
+        });
+
+        DeleteButton.setText("Delete Profile");
+        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -278,10 +294,14 @@ public class UserHomepage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(PendingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(MyBillsButton)
-                        .addGap(55, 55, 55)
-                        .addComponent(BudgetButton))
-                    .addComponent(LogoutButton))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(MyBillsButton)
+                            .addComponent(LogoutButton)
+                            .addComponent(EditButton))
+                        .addGap(49, 49, 49)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DeleteButton)
+                            .addComponent(BudgetButton))))
                 .addGap(73, 73, 73))
         );
         layout.setVerticalGroup(
@@ -323,49 +343,53 @@ public class UserHomepage extends javax.swing.JFrame {
                         .addComponent(ClearDebtButton2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(BalanceName2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(BalanceNameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(BalanceCostLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6))
-                            .addComponent(BalanceCost2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(BalanceName3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(BalanceCost3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(BalanceNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(NewBillButton)
+                                            .addComponent(PendingRequestsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(HandleRequests))
+                                    .addComponent(PendingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addComponent(BalanceCostLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ClearDebtButton3))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(MyBillsButton)
+                                    .addComponent(BudgetButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(LogoutButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BalanceName2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(BalanceNameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(BalanceCostLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(6, 6, 6))
+                                    .addComponent(BalanceCost2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(BalanceName3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(BalanceCost3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(BalanceNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(BalanceCostLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(ClearDebtButton3))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(LoadNextButton)
-                            .addComponent(LoadPreviousButton))
-                        .addContainerGap(40, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(NewBillButton)
-                                    .addComponent(PendingRequestsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addComponent(HandleRequests))
-                            .addComponent(PendingRequests, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(MyBillsButton)
-                            .addComponent(BudgetButton))
-                        .addGap(27, 27, 27)
-                        .addComponent(LogoutButton)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(LoadPreviousButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(EditButton)
+                                .addComponent(DeleteButton)))
+                        .addContainerGap(40, Short.MAX_VALUE))))
         );
 
         pack();
@@ -428,13 +452,13 @@ public class UserHomepage extends javax.swing.JFrame {
     private void ClearDebtButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearDebtButton2ActionPerformed
         // TODO add your handling code here:
          api a = new api();
-         if(a.yetToAnswerRequests(creditor1) > 0)
+         if(a.yetToAnswerRequests(creditor3) > 0)
         {
             MessageBox.setForeground(Color.RED);
             MessageBox.setText("People Still Have To Fill Some Bills by That User");
             return;
         }
-        if(a.clearDebt(user_id, creditor1) == -1)
+        if(a.clearDebt(user_id, creditor3) == -1)
             MessageBox.setText("Something Went Wrong");
         else
         {
@@ -452,13 +476,13 @@ public class UserHomepage extends javax.swing.JFrame {
     private void ClearDebtButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearDebtButton3ActionPerformed
         // TODO add your handling code here:
          api a = new api();
-         if(a.yetToAnswerRequests(creditor1) > 0)
+         if(a.yetToAnswerRequests(creditor3) > 0)
         {
             MessageBox.setForeground(Color.RED);
             MessageBox.setText("People Still Have To Fill Some Bills by That User");
             return;
         }
-        if(a.clearDebt(user_id, creditor1) == -1)
+        if(a.clearDebt(user_id, creditor3) == -1)
         {
             MessageBox.setForeground(Color.RED);
             MessageBox.setText("Something Went Wrong");
@@ -471,8 +495,8 @@ public class UserHomepage extends javax.swing.JFrame {
             DebitValue.setText(Float.toString(debit));
             total_bal = credit - debit;
             TotalValue.setText(Float.toString(total_bal));
-            BalanceCost2.setText(Float.toString(0));
-            ClearDebtButton2.setVisible(false);
+            BalanceCost3.setText(Float.toString(0));
+            ClearDebtButton3.setVisible(false);
         }
         a.closeConnection();
     }//GEN-LAST:event_ClearDebtButton3ActionPerformed
@@ -507,6 +531,25 @@ public class UserHomepage extends javax.swing.JFrame {
         }
         a.closeConnection();
     }//GEN-LAST:event_LoadPreviousButtonActionPerformed
+
+    private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
+        // TODO add your handling code here:
+        api a = new api();
+        if(a.deleteUser(this.user_id) == -1)
+        {
+            MessageBox.setForeground(Color.RED);
+            MessageBox.setText("Something Went Wrong");
+        }
+        this.setVisible(false);
+        new LoginPage().setVisible(true);
+        a.closeConnection();
+    }//GEN-LAST:event_DeleteButtonActionPerformed
+
+    private void EditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditButtonActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new EditUser(this.user_id).setVisible(true);
+    }//GEN-LAST:event_EditButtonActionPerformed
 
     private void updateBalances(api a)
     {
@@ -651,7 +694,7 @@ public class UserHomepage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UserHomepage(3).setVisible(true);
+                new UserHomepage(1).setVisible(true);
             }
         });
     }
@@ -678,6 +721,8 @@ public class UserHomepage extends javax.swing.JFrame {
     private javax.swing.JLabel CreditValue;
     private javax.swing.JLabel Debit;
     private javax.swing.JLabel DebitValue;
+    private javax.swing.JButton DeleteButton;
+    private javax.swing.JButton EditButton;
     private javax.swing.JButton HandleRequests;
     private javax.swing.JButton LoadNextButton;
     private javax.swing.JButton LoadPreviousButton;

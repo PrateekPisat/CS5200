@@ -77,6 +77,34 @@ public class api implements InterfaceAPI
             return -1;
         }
     }
+    // updateUser: int ,String, String, String, String,Int -> Int
+    // Input: The new user's name, email, password, phone, access previlleges.
+    // Output: 1 on success, -1 on failure.
+    // Example: updateUser(2, "Bob", "bob@example.com", "Password", "1234567890", 0) -> 1
+    public int updateUser(int user_id, String name, String email, String pass, String phone, int isHidden)
+    {
+        try
+        {
+            Connection con = dbc.getConnection();
+            String query = "UPDATE `Splitwise`.`Users` \n" +
+                           " SET `Name` = ?, `Email` = ?, `Password` = ?, `Phone` = ?\n"+
+                           "WHERE Users_id = ?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1, name);
+            preparedStmt.setString(2, email);
+            preparedStmt.setString(3, pass);
+            preparedStmt.setString(4, phone);
+            preparedStmt.setInt(5, user_id);
+            preparedStmt.execute();
+            preparedStmt.close();
+            return 1;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
     
     // getAllUsers: void -> List<User>
     // output: returns a list of all the registered users except the given user
@@ -114,6 +142,62 @@ public class api implements InterfaceAPI
             e.printStackTrace();
         }
         return users;
+    }
+    
+    // getUser: int -> User
+    // input: user if of the user.
+    // output: The user with the provided user id on success, null on failure.
+    // example: getUser(1) -> new Users(1, "Alice", "alice@exmaple.com", "Password", "1234567890", 0)
+    public User getUser(int user_id)
+    {
+        try{
+            Connection con = dbc.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(
+                    "select * from Users \n" +
+                    "where Users_id = "+user_id
+            );
+            if(rs.next())
+            {
+                return new Users(
+                        Integer.parseInt(rs.getString("Users_id")),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("Password"),
+                        rs.getString("Phone"),
+                        Integer.parseInt(rs.getString("Hide_Data"))
+                );
+                
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    // deleteUser: int -> int
+    // input: the user's id
+    // output: 1 on successful deletion, -1 on failure
+    // example: deletUser(1) -> 1
+    public int deleteUser(int user_id)
+    {
+        try{
+            Connection con = dbc.getConnection();
+            String query = 
+                    "DELETE from `Splitwise`.`Users`\n"+
+                    "WHERE Users_id = ?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt(1, user_id);
+            preparedStmt.execute();
+            return 1;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
     }
     
     // getUserName
@@ -965,9 +1049,10 @@ public class api implements InterfaceAPI
             Connection con = dbc.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(
-                    "select Name, Amount\n" +
-                    "from Share join Ledger using(Bills_id, Item_id) join Bill_Items using(Bills_id, Item_id)\n" +
-                    "where Users_id = " + user_id
+                    "select Bill_Items.Name, SUM(Amount) as 'Amount'\n" +
+                    "from Share join Ledger using(Bills_id, Item_id) join Bill_Items using(Bills_id, Item_id) join Bills using (Bills_id)\n" +
+                    "where Users_id = "+ user_id +" and MONTH(Date) = MONTH(NOW()) AND YEAR(Date) = YEAR(NOW())\n" +
+                    "group by Name;"
             );
             while(rs.next())
             {
