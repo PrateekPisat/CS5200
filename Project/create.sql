@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `Splitwise`.`Users` (
   `Password` VARCHAR(45) NOT NULL,
   `Budget` FLOAT NULL DEFAULT -1,
   `Phone` CHAR(11) NULL,
-  `Hide_Data` TINYINT NULL,
   PRIMARY KEY (`Users_id`),
   UNIQUE INDEX `Email_UNIQUE` (`Email` ASC),
   UNIQUE INDEX `Phone_UNIQUE` (`Phone` ASC))

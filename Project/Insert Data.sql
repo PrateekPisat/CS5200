@@ -1,14 +1,14 @@
 use Splitwise;
 
 INSERT INTO `Splitwise`.`Users` 
-(`Users_id`, `Name`, `Email`, `Password`, `Budget`, `Phone`, `Hide_Data`) 
+(`Users_id`, `Name`, `Email`, `Password`, `Budget`, `Phone`) 
 VALUES 
-(1, 'Alice', 'alice@example.com', 'Password', -1, NULL, 0),
-(2, 'Bob', 'bob@example.com', 'Password', -1, NULL, 0),
-(3, 'Carol', 'carol@example.com', 'Password', -1, NULL, 0),
-(4, 'David', 'david@example.com', 'Password', -1, NULL, 0),
-(5, 'Eric', 'eric@example.com', 'Password', -1, NULL, 0),
-(6, 'Frank', 'frank@example.com', 'Password', -1, NULL, 0);
+(1, 'Alice', 'alice@example.com', 'Password', -1, NULL),
+(2, 'Bob', 'bob@example.com', 'Password', -1, NULL),
+(3, 'Carol', 'carol@example.com', 'Password', -1, NULL),
+(4, 'David', 'david@example.com', 'Password', -1, NULL),
+(5, 'Eric', 'eric@example.com', 'Password', -1, NULL),
+(6, 'Frank', 'frank@example.com', 'Password', -1, NULL);
 
 select * from Users;
 
@@ -118,8 +118,7 @@ from ledger
 order by Bills_id, Amount;
 */
 
-select *
-from share join bills using(bills_id) join bill_items using(bills_id, item_id)
-where MONTH(Date) = MONTH(dateadd(dd, -1, GetDate()))
-AND
-YEAR(Date) = YEAR(dateadd(dd, -1, GetDate()));
+select Bill_Items.Name, SUM(Amount) as 'Amount'
+from Share join Ledger using(Bills_id, Item_id) join Bill_Items using(Bills_id, Item_id) join Bills using (Bills_id)
+where Users_id = 1 and MONTH(Date) = MONTH(NOW()) AND YEAR(Date) = YEAR(NOW())
+group by Name;
