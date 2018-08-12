@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package splitwise;
 
 import java.awt.Color;
@@ -10,17 +5,11 @@ import java.sql.Timestamp;
 import com.toedter.calendar.*;
 import java.util.Date;
 
-/**
- *
- * @author Prateek
- */
 public class NewBillForm extends javax.swing.JFrame {
 
+    // Class Variables
     int user_id;
-    public NewBillForm() {
-        initComponents();
-    }
-    
+    // Constructor
     public NewBillForm(int user_id) {
         initComponents();
         this.user_id = user_id;
@@ -151,18 +140,19 @@ public class NewBillForm extends javax.swing.JFrame {
         new UserHomepage(user_id).setVisible(true);
     }//GEN-LAST:event_BackButtonActionPerformed
 
+    // Event handler for CreateBill
+    // This function will be called when the "Create Bill" Button is clicked.
     private void CreateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateButtonActionPerformed
-//        // TODO add your handling code here:
         api a = new api();
         int res;
         res = a.createBill(BillName.getText(), Description.getText(), user_id, new Timestamp(Calender.getCalendar().getTimeInMillis()));
-        if(res == -1)
+        if(res == -1) // -1 is the error code for SQL Exceptions
         {
             ErrorProvider.setVisible(true);
             ErrorProvider.setForeground(Color.RED);
             ErrorProvider.setText("Bill Creation Error");
         } 
-        else if(res == -2)
+        else if(res == -2) // -2 is the Error code if any of the Fields are left blank
         {
             ErrorProvider.setVisible(true);
             ErrorProvider.setForeground(Color.RED);
@@ -173,43 +163,9 @@ public class NewBillForm extends javax.swing.JFrame {
             this.setVisible(false);
             new AddBillItems(res).setVisible(true);
         }
-        //System.out.println(new Timestamp(Calender.getCalendar().getTimeInMillis()).toString());
+        a.closeConnection();
     }//GEN-LAST:event_CreateButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewBillForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewBillForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewBillForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewBillForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NewBillForm().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackButton;

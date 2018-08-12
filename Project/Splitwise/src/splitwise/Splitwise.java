@@ -1,20 +1,11 @@
-/*
-
- */
+// This is the main Class of the Application.
 package splitwise;
 
-/**
- *
- * @author Prateek
- */
-public class Splitwise {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+public class Splitwise 
+{
+    public static void main(String[] args) 
+    {
+        // Load the Login Page, which is the starting poin of the application.
         new LoginPage().setVisible(true);
-    }
-    
+    }   
 }

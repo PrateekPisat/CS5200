@@ -4,16 +4,17 @@ import java.awt.Color;
 
 public class EditUser extends javax.swing.JFrame {
 
+    // Class Variables
     int user_id;
     User thisUser;
-    public EditUser() {
-        initComponents();
-    }
+    // Constructor 
     
     public EditUser(int user_id) {
+        // THis will init all the UI Elements
         initComponents();
         this.user_id = user_id;
         api a = new api();
+        // Init UI label values
         thisUser = a.getUser(user_id);
         Name.setText(thisUser.getUserName());
         Email.setText(thisUser.getEmail());
@@ -42,7 +43,7 @@ public class EditUser extends javax.swing.JFrame {
         MessageBox = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(400, 400));
 
         PhoneLabel.setText("Phone No.");
         PhoneLabel.setToolTipText("Enter Phone Number");
@@ -158,6 +159,8 @@ public class EditUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Event handler for UpdateUser
+    // This function will be called when the "Update User" Button is clicked.
     private void UpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateUserActionPerformed
         // TODO add your handling code here:
         if(Name.getText().equals("") ||  Email.getText().equals("") || Password.getText().equals(""))
@@ -168,7 +171,7 @@ public class EditUser extends javax.swing.JFrame {
         }
         api a = new api();
         int res;
-        res = a.updateUser(this.user_id, Name.getText(), Email.getText(), Password.getText(), Phone.getText(), 0);
+        res = a.updateUser(this.user_id, Name.getText(), Email.getText(), Password.getText(), Phone.getText());
         a.closeConnection();
         if(res == -1)
             System.out.println("Invalid Details. Please Check Your Details.");
@@ -177,6 +180,8 @@ public class EditUser extends javax.swing.JFrame {
 
     }//GEN-LAST:event_UpdateUserActionPerformed
 
+    // Event handler for Clear
+    // This function will be called when the "Clear" Button is clicked.
     private void Clear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Clear2ActionPerformed
         // TODO add your handling code here:\
         Name.setText("");
@@ -185,6 +190,8 @@ public class EditUser extends javax.swing.JFrame {
         Phone.setText("");
     }//GEN-LAST:event_Clear2ActionPerformed
 
+    // Event handler for Back
+    // This function will be called when the "Back" Button is clicked.
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
         Clear2ActionPerformed(evt);
@@ -192,45 +199,9 @@ public class EditUser extends javax.swing.JFrame {
         new UserHomepage(this.user_id).setVisible(true);
     }//GEN-LAST:event_BackActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditUser().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
-    private javax.swing.JButton Clear;
-    private javax.swing.JButton Clear1;
     private javax.swing.JButton Clear2;
     private javax.swing.JTextField Email;
     private javax.swing.JLabel EmailLabel;

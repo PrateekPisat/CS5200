@@ -118,7 +118,13 @@ from ledger
 order by Bills_id, Amount;
 */
 
-select Bill_Items.Name, SUM(Amount) as 'Amount'
-from Share join Ledger using(Bills_id, Item_id) join Bill_Items using(Bills_id, Item_id) join Bills using (Bills_id)
-where Users_id = 1 and MONTH(Date) = MONTH(NOW()) AND YEAR(Date) = YEAR(NOW())
-group by Name;
+select count(Bills_id)
+from
+(
+	select distinct(Bills_id)
+	from bills join share using(bills_id) join bill_requests using(bills_id)
+	where (Users_id = 2 and Paid_By = 1) OR (Paid_By = 1 and To_id = 2)
+) as t1 join bill_requests using(Bills_id);
+
+select * from bills;
+select * from bill_requests;

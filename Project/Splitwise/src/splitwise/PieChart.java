@@ -1,3 +1,5 @@
+// A Pie-Chart instance represnts a JPannel that display a PieChart of the 
+// spendings of the given user of the current month
 package splitwise;
 
 import java.util.List;
@@ -12,17 +14,22 @@ import org.jfree.ui.RefineryUtilities;
  
 public class PieChart extends ApplicationFrame 
 {
+    // Class Variables.
     int user_id;
     ChartPanel CP;
    
-   public PieChart( String title, int user_id) {
+    // Constructor
+    public PieChart( String title, int user_id) 
+    {
       super( title ); 
       this.user_id = user_id;
       CP = createDemoPanel( );
-   }
+    }
    
-   private PieDataset createDataset( ) 
-   {
+    // createDataSet: void -> PieDataSet
+    // returns: a PieDataSet instance with with users current spendings.
+    private PieDataset createDataset( ) 
+    {
        api a = new api();
        List<DataSetItem> DSItems = a.getDataSetFor(user_id);
        DefaultPieDataset dataset = new DefaultPieDataset( );
@@ -32,9 +39,13 @@ public class PieChart extends ApplicationFrame
        }
        a.closeConnection();
        return dataset;         
-   }
+    }
    
-   private JFreeChart createChart( PieDataset dataset ) {
+    // createChart: PieDataSet -> JFreeChart
+    // input: a PieDataSet instance representing a dataset for a Pie-Chart.
+    // output: A JfreeChart instance to add to a JPannel
+    private JFreeChart createChart( PieDataset dataset ) 
+    {
       JFreeChart chart = ChartFactory.createPieChart(      
          "This Months Spending",   // chart title 
          dataset,          // data    
@@ -43,10 +54,13 @@ public class PieChart extends ApplicationFrame
          false);
 
       return chart;
-   }
+    }
    
-   public ChartPanel createDemoPanel( ) {
+    // ChartPannel: void -> ChartPannel
+    // Returns : a ChartPannel instance with the Pie-Chart.
+    public ChartPanel createDemoPanel( ) 
+    {
       JFreeChart chart = createChart(createDataset( ) );  
       return new ChartPanel( chart ); 
-   }
+    }
 }

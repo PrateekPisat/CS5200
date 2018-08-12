@@ -53,20 +53,19 @@ public class api implements InterfaceAPI
     // Input: The new user's name, email, password, phone, access previlleges.
     // Output: 1 on success, -1 on failure.
     // Example: register("Bob", "bob@example.com", "Password", "1234567890", 0) -> 1
-    public int register(String name, String email, String pass, String phone, int isHidden)
+    public int register(String name, String email, String pass, String phone)
     {
         try
         {
             Connection con = dbc.getConnection();
             String query = "INSERT INTO `Splitwise`.`Users` \n" +
-                           "(`Name`, `Email`, `Password`, `Phone`, `Hide_Data`)\n" +
-                           "values(?, ?, ?, ?, ?);";
+                           "(`Name`, `Email`, `Password`, `Phone`)\n" +
+                           "values(?, ?, ?, ?);";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, name);
             preparedStmt.setString(2, email);
             preparedStmt.setString(3, pass);
             preparedStmt.setString(4, phone);
-            preparedStmt.setInt(5, isHidden);
             preparedStmt.execute();
             preparedStmt.close();
             return 1;
@@ -81,7 +80,7 @@ public class api implements InterfaceAPI
     // Input: The new user's name, email, password, phone, access previlleges.
     // Output: 1 on success, -1 on failure.
     // Example: updateUser(2, "Bob", "bob@example.com", "Password", "1234567890", 0) -> 1
-    public int updateUser(int user_id, String name, String email, String pass, String phone, int isHidden)
+    public int updateUser(int user_id, String name, String email, String pass, String phone)
     {
         try
         {
@@ -165,7 +164,7 @@ public class api implements InterfaceAPI
                         rs.getString("Email"),
                         rs.getString("Password"),
                         rs.getString("Phone"),
-                        Integer.parseInt(rs.getString("Hide_Data"))
+                        Float.parseFloat(rs.getString("Budget"))
                 );
                 
             }
@@ -200,8 +199,11 @@ public class api implements InterfaceAPI
         return -1;
     }
     
-    // getUserName
-    String getUserName(int user_id)
+    // getUserName: int -> String
+    // input: user id for a  user
+    // output: The name of the said user on success, null on failure.
+    // example: getUserName(1) -> "Alice"
+    public String getUserName(int user_id)
     {
         try{
             Connection con = dbc.getConnection();
@@ -222,7 +224,12 @@ public class api implements InterfaceAPI
         return null;
     }
     
-    float getCredit(int user_id)
+    // getCredit: int -> float
+    // input: the user id of a user
+    // output: the amount of money all other users owe the given user on success,
+    //          -1 on fialure.
+    // example: getCredit(1) -> 11.12
+    public float getCredit(int user_id)
     {
         try{
             Connection con = dbc.getConnection();
@@ -244,7 +251,12 @@ public class api implements InterfaceAPI
         return -1;
     }
     
-    float getDebit(int user_id)
+    // getDebit: int -> float
+    // input: the user id of a user
+    // output: the sum of amount of money the given user owes all other
+    //         user on success, -1 on fialure.
+    // example: getCredit(1) -> 0
+    public float getDebit(int user_id)
     {
         try{
             Connection con = dbc.getConnection();
@@ -342,7 +354,7 @@ public class api implements InterfaceAPI
     //example: getBill(1) -> new Bill(1, "Stop-n-Shop Groceries", "2018-07-01 
     //                                03:36:00", 
     //                                "Groceries I brought at Stop n Shop", 1)
-    Bill getBill(int id)
+    public Bill getBill(int id)
     {
         try
         {
@@ -392,6 +404,34 @@ public class api implements InterfaceAPI
             preparedStmt.setFloat(4, cost);
             preparedStmt.execute();
             return 1;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    // updateItem() : Int, Int, String, Float -> Int
+    // Input: the bill number, item number, item name, item cost
+    // Effect: updates an item.
+    // Output: 1 on succesfull updation of item, -1 on failure
+    // Example: updateItem(1, 1, "Bread", 2.03) -> 1
+    public int updateItem(int item_id, int bill_id, String name, float cost)
+    {
+        try
+        {
+            Connection con = dbc.getConnection();
+            String query = "Update `Splitwise`.`Bill_Items` \n" +
+                           "SET `Name` = ?, `Cost` = ? \n" +
+                           "WHERE Item_id = ? and Bills_id = ?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1, name);
+            preparedStmt.setFloat(2, cost);
+            preparedStmt.setInt(3, item_id);
+            preparedStmt.setInt(4, bill_id);
+            preparedStmt.execute();
+            return updateLedger(bill_id, item_id);
         }
         catch(SQLException e)
         {
@@ -499,21 +539,25 @@ public class api implements InterfaceAPI
         return -1;
     }
     
-    // yetToAnswerRequests: int -> int
-    // input: the user_id
-    // output: the number of bill requests send by this user that have not yet
-    //         been filled.
+    // yetToAnswerRequests: int int -> int
+    // input: the user_id of the creditor and debtor
+    // output: the number of remaining bill requests for the bills shared amongst the
+    //         the creditor and the debtor
     // example: yetToAnswerRequests(1) -> 1
-    public int yetToAnswerRequests(int user_id)
+    public int yetToAnswerRequests(int creditor_id, int debtor_id)
     {
         try
         {
              Connection con = dbc.getConnection();
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(
-                    "select count(Bills_Id) as 'Pending Requests'\n" +
-                    "from Bills join bill_requests using(Bills_id)\n" +
-                    "where Paid_By = "+user_id
+                    "select count(Bills_id) as 'Pending Requests'\n" +
+                    "from\n" +
+                    "(\n" +
+                    "	select distinct(Bills_id)\n" +
+                    "	from bills join share using(bills_id) join bill_requests using(bills_id)\n" +
+                    "	where (Users_id = "+debtor_id+" and Paid_By = "+creditor_id+") OR (Paid_By = "+creditor_id+" and To_id = "+debtor_id+")\n" +
+                    ") as t1 join bill_requests using(Bills_id);"
             );
             if(rs.next())
             {
@@ -711,7 +755,6 @@ public class api implements InterfaceAPI
             if(totalSharees == -1 || cost == -1)
                 return -1;
             cost = totalSharees>0?cost / totalSharees:cost;
-            
             String query = "INSERT INTO Ledger(Amount, Bills_id, Item_id) VALUES (?, ?, ?)\n" +
                            "  ON DUPLICATE KEY UPDATE Amount = ? ;";
             PreparedStatement preparedStmt = con.prepareStatement(query);
@@ -734,7 +777,7 @@ public class api implements InterfaceAPI
     // output: the number of users sharing the said item on suceess, -1 on 
     //         failure.
     // example: getSharees(1,1) -> 3
-    int getSharees(int bill_id, int item_id)
+    public int getSharees(int bill_id, int item_id)
     {
         try
         {
@@ -763,7 +806,7 @@ public class api implements InterfaceAPI
     // input: the bill_id and the item_id
     // output: the cost of the said item on success, else -1 on failure.
     // example: getCost(1, 1) -> 5.83
-    float getCost(int bill_id, int item_id)
+    public float getCost(int bill_id, int item_id)
     {
         try
         {
@@ -791,7 +834,6 @@ public class api implements InterfaceAPI
     // output: A list of Bills the user particpated in on success, null on 
     //         failure.
     // example: getParticipatedBills(1) -> [new Bill(1, 'Test', '', 06/28/2018)]
-    
     public List<Bill> getParticipatedBills(int user_id)
     {
         List<Bill> bills = new ArrayList<Bill>();
@@ -854,7 +896,7 @@ public class api implements InterfaceAPI
     // output: the user's current budget on success, -1 on failure or if budget
     //         is not set.
     //example: getUserBudget(1) -> 100.00
-    float getUserBudget(int user_id)
+    public float getUserBudget(int user_id)
     {
         try
         {
@@ -937,7 +979,7 @@ public class api implements InterfaceAPI
     // andTheyOweMe: int int -> int
     // input: the user ids of the creditor and the debtor
     // output: the amount the debtor owes to the credtior.
-    //  example: andTheyOweMe(1, 3) -> 55.55
+    // example: andTheyOweMe(1, 3) -> 55.55
     public float andTheyOweMe(int creditor_id, int debtor_id)
     {
         try

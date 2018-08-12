@@ -1,3 +1,4 @@
+// A DBConnect instance represents a Connection to the underlying database.
 package splitwise;
 
 import java.io.File;
@@ -12,7 +13,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DBConnect {
+public class DBConnect 
+{
     private String url;
     private String user;
     private String password;
